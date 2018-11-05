@@ -2,59 +2,61 @@
 
 %Defining the incoming state.
 z=[1,0]';
-%Defining the outgoing state.
-x=[1/sqrt(2),1/sqrt(2)];
+%Defining the relative angle between each Stern-Gerlach device
+theta=pi/4;
+%Defines the first Stern-Gerlach Device, SGz.
+SGz=[cos(0),sin(0);,0,0];
+%Calculates the probability of the +z state passing through a SGz device
+% out of the +z side and initializes the total probability as 1.
+P_total=(SGz*z)'*(SGz*z);
 
-%Initializes the equivalent matrix for the total of the Stern-Gerlach 
-%devices as an identity matrix.
-SGtotal=[1,0;0,1];
-
-%This loop creates a matrix that is equivalent to three Stern-Gerlach
-%devices in a series, such that each succesive device is rotated by pi/4 
-%from angle 0 to pi/2.
-for theta=0:pi/4:pi/2
+%This loop updates the total probability of transmission through the series
+%of 2 SGn devices following the 1 SGz device.
+for i=1:2
     SGn=[cos(theta/2),sin(theta/2);0,0];
-    SGtotal=SGn*SGtotal;
+    P=(SGn*z)'*(SGn*z);
+    P_total=P_total*P;
 end
-AmplitudeA=x*SGtotal*z;
-ProbabilityA=(AmplitudeA)^2;
-fprintf('The probability for part A is : %.4f\n', ProbabilityA);
+fprintf('The probability for part A is : %.4f\n', P_total);
 
-%%PART B%%
+%%Part B%%
 
-%Re-initializes the equivalent matrix for the total of the Stern-Gerlach 
-%devices as an identity matrix so that the three SG devices from part A are
-%not added to the 30 SG devices from part B.
-SGtotal=[1,0;0,1];
+%Defining the relative angle between each Stern-Gerlach device
+theta=pi/58;
+%Calculates the probability of the +z state passing through the first of 30
+%Stern Gerlach devices, an SGz device. Also initializes the total 
+%probability as 1.
+P_total=(SGz*z)'*(SGz*z);
 
-%This loop creates a matrix that is equivalent to thirty Stern-Gerlach
-%devices in a series, such that each succesive device is rotated
-%incrementally from angle 0 to pi/2.
-for theta=0:pi/58:29*pi/58
+%This loop updates the total probability of transmission through the series
+%of 29 SGn devices following the 1 SGz device.
+for i=1:29
     SGn=[cos(theta/2),sin(theta/2);0,0];
-    SGtotal=SGn*SGtotal;
+    P=(SGn*z)'*(SGn*z);
+    P_total=P_total*P;
 end
-AmplitudeB=x*SGtotal*z;
-ProbabilityB=(AmplitudeB)^2;
-fprintf('The probability for part B is : %.4f\n', ProbabilityB);
+fprintf('The probability for part B is : %.4f\n', P_total);
 
-%%PART C%%
+%%Part C%%
 
-%Re-initializes the equivalent matrix for the total of the Stern-Gerlach 
-%devices as an identity matrix so that Part A and B do not affect part C.
-SGtotal=[1,0;0,1];
+%Calculates the probability of the +z state passing through the first of a
+%series of Stern Gerlach devices, an SGz device. Also initializes the 
+%total probability as 1.
+P_total=(SGz*z)'*(SGz*z);
 
-%This loop creates a matrix that is equivalent to 13 consecutive Stern-
-%Gerlach devices progressively rotated from angle 0 to pi/2 where their 
-%individual angles are given by the sequence 0,2,5,9,...90.
-theta=-1; 
-n=0; %initial conditions for the recurrence relation.
-while n<13
-theta=theta+n+1; %Recurrene relation for the sequence described above
-SGn=[cos(deg2rad(theta/2)),sin(deg2rad(theta/2));0,0];
-SGtotal=SGn*SGtotal;
-n=n+1;
+%Sets the first rotated Stern-Gerlach device to an angle of 2 degrees from
+%the z axis.
+theta=2;
+
+%This loop updates the total probability of transmission through the series
+%of 12 SGn devices following the 1 SGz device.
+for i=1:12
+    SGn=[cos(deg2rad(theta)/2),sin(deg2rad(theta)/2);0,0];
+    P=(SGn*z)'*(SGn*z);
+    P_total=P_total*P;
+    theta=theta+1;
 end
-AmplitudeC=x*SGtotal*z;
-ProbabilityC=(AmplitudeC)^2;
-fprintf('The probability for part C is : %.4f\n', ProbabilityC);
+fprintf('The probability for part C is : %.4f\n', P_total);
+
+
+
