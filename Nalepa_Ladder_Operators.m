@@ -27,7 +27,7 @@ end
 for c = 1:s
     p(c+1,c) = -sqrt(c);
 end
-p = -i.*sqrt(0.5).*p;
+p = -i*sqrt(0.5).*p;
 
 %Creates a matrix containg all of the vectors for each possible state.
 %The jth column corresponds to psi_(j-1); The first column is psi_0.
@@ -43,7 +43,6 @@ op = input(prompt);
 
 %Calculates and displays the desired overlap
 overlap = psi_n(:,m+1)'*op*psi_n(:,n+1);
-fprintf('The overlap is: %.4f\n', overlap);
-
+disp(overlap);
 
 
